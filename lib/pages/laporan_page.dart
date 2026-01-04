@@ -20,7 +20,7 @@ class LaporanPage extends StatelessWidget {
 }
 
 /// ===============================
-/// VIEW / UI (TIDAK DIUBAH)
+/// VIEW / UI
 /// ===============================
 class LaporanView extends StatelessWidget {
   const LaporanView({super.key});
@@ -33,8 +33,11 @@ class LaporanView extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Laporan berhasil dikirim')),
           );
-
-          Navigator.pop(context); // kembali ke halaman sebelumnya
+          Navigator.pop(context); 
+        } else if (state.status == LaporanStatus.error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Gagal mengirim laporan, periksa koneksi anda')),
+          );
         }
       },
       child: Scaffold(
@@ -81,8 +84,7 @@ class LaporanView extends StatelessWidget {
               _textField(
                 label: "Alamat",
                 hint: "Jl. Sukabirus",
-                onChanged: (v) =>
-                    context.read<LaporanCubit>().updateAlamat(v),
+                onChanged: (v) => context.read<LaporanCubit>().updateAlamat(v),
               ),
 
               const SizedBox(height: 12),
@@ -91,8 +93,7 @@ class LaporanView extends StatelessWidget {
               _textField(
                 label: "Koordinat",
                 hint: "Masukkan koordinat atau link maps",
-                onChanged: (v) =>
-                    context.read<LaporanCubit>().updateKoordinat(v),
+                onChanged: (v) => context.read<LaporanCubit>().updateKoordinat(v),
               ),
 
               const SizedBox(height: 16),
@@ -115,9 +116,7 @@ class LaporanView extends StatelessWidget {
                       );
 
                       if (pickedFile != null) {
-                        context
-                            .read<LaporanCubit>()
-                            .setFoto(File(pickedFile.path));
+                        context.read<LaporanCubit>().setFoto(File(pickedFile.path));
                       }
                     },
                     child: Container(
@@ -155,30 +154,46 @@ class LaporanView extends StatelessWidget {
                 label: "Catatan Tambahan",
                 hint: "Contoh: air mulai naik sejak sore",
                 maxLines: 3,
-                onChanged: (v) =>
-                    context.read<LaporanCubit>().updateCatatan(v),
+                onChanged: (v) => context.read<LaporanCubit>().updateCatatan(v),
               ),
 
               const SizedBox(height: 24),
 
-              /// BUTTON
+              /// BUTTON - PERBAIKAN DI SINI
               SizedBox(
                 width: double.infinity,
                 height: 48,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0B3470),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    context.read<LaporanCubit>().submit();
+                child: BlocBuilder<LaporanCubit, LaporanState>(
+                  builder: (context, state) {
+                    final isLoading = state.status == LaporanStatus.loading;
+                    
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0B3470),
+                        disabledBackgroundColor: Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      // Tombol akan memanggil submit dengan ID Masyarakat yang diinginkan
+                      onPressed: isLoading 
+                          ? null 
+                          : () => context.read<LaporanCubit>().submit("M8621"),
+                      child: isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              "Kirim Laporan",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                    );
                   },
-                  child: const Text(
-                    "Kirim Laporan",
-                    style: TextStyle(color: Colors.white),
-                  ),
                 ),
               ),
             ],
@@ -205,8 +220,7 @@ class LaporanView extends StatelessWidget {
           onChanged: onChanged,
           decoration: InputDecoration(
             hintText: hint,
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
       ],

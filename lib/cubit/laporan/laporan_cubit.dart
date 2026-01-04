@@ -12,7 +12,6 @@ part 'laporan_state.dart';
 class LaporanCubit extends Cubit<LaporanState> {
   LaporanCubit() : super(const LaporanState());
 
-  /// 🔗 GANTI DENGAN IP / DOMAIN SERVER KAMU
   static const String baseUrl = 'http://10.0.2.2:8000/api';
 
   void updateAlamat(String value) {
@@ -31,17 +30,19 @@ class LaporanCubit extends Cubit<LaporanState> {
     emit(state.copyWith(foto: file));
   }
 
-  // =============================
-  // USER KIRIM LAPORAN KE API
-  // =============================
-  Future<void> submit() async {
+  // ==========================================
+  // USER KIRIM LAPORAN KE API (DINAMIS)
+  // ==========================================
+  // Sekarang menerima parameter [idUser] agar tidak terkunci di satu ID saja
+  Future<void> submit(String idUser) async {
     emit(state.copyWith(status: LaporanStatus.loading));
 
     try {
       final uri = Uri.parse('$baseUrl/laporan');
-
       final request = http.MultipartRequest('POST', uri);
 
+      // Menggunakan idUser yang dikirim saat tombol ditekan
+      request.fields['id_masyarakat'] = idUser; 
       request.fields['alamat'] = state.alamat;
       request.fields['koordinat'] = state.koordinat;
       request.fields['catatan'] = state.catatan;
@@ -66,9 +67,12 @@ class LaporanCubit extends Cubit<LaporanState> {
           foto: null,
         ));
       } else {
+        final respStr = await response.stream.bytesToString();
+        print("Gagal: ${response.statusCode} - $respStr");
         emit(state.copyWith(status: LaporanStatus.error));
       }
     } catch (e) {
+      print("Error submit: $e");
       emit(state.copyWith(status: LaporanStatus.error));
     }
   }
@@ -108,11 +112,15 @@ class LaporanCubit extends Cubit<LaporanState> {
   // =============================
   Future<void> approveLaporan(String id) async {
     try {
-      await http.put(
+      final response = await http.put(
         Uri.parse('$baseUrl/laporan/$id/approve'),
       );
 
-      fetchLaporan();
-    } catch (_) {}
+      if (response.statusCode == 200) {
+        fetchLaporan();
+      }
+    } catch (e) {
+      print("Error approve: $e");
+    }
   }
 }
