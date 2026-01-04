@@ -7,15 +7,12 @@ abstract class AuthState extends Equatable {
   List<Object?> get props => [];
 }
 
-/// 🔹 STATE AWAL
 class AuthInitial extends AuthState {}
 
-/// 🔹 SAAT LOGIN PROSES
 class AuthLoading extends AuthState {}
 
-/// 🔹 LOGIN BERHASIL
 class AuthSuccess extends AuthState {
-  final String role; // admin / user
+  final String role;
 
   const AuthSuccess({required this.role});
 
@@ -23,7 +20,6 @@ class AuthSuccess extends AuthState {
   List<Object?> get props => [role];
 }
 
-/// 🔹 LOGIN GAGAL
 class AuthError extends AuthState {
   final String message;
 

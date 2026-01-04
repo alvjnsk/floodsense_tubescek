@@ -39,11 +39,8 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                /// LOGO
                 Image.asset('assets/images/FloodBiru.png', height: 90),
-
                 const SizedBox(height: 24),
-
                 const Text(
                   "Selamat Datang",
                   style: TextStyle(
@@ -52,36 +49,25 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color(0xFF0B3470),
                   ),
                 ),
-
                 const SizedBox(height: 6),
-
                 const Text(
                   "Masuk untuk melaporkan kondisi banjir",
                   style: TextStyle(color: Colors.grey),
                 ),
-
                 const SizedBox(height: 32),
-
-                /// EMAIL
                 _inputField(
                   icon: Icons.email,
                   hint: "Email",
                   controller: emailController,
                 ),
-
                 const SizedBox(height: 16),
-
-                /// PASSWORD
                 _inputField(
                   icon: Icons.lock,
                   hint: "Password",
                   isPassword: true,
                   controller: passwordController,
                 ),
-
                 const SizedBox(height: 24),
-
-                /// LOGIN BUTTON
                 SizedBox(
                   width: double.infinity,
                   height: 48,
@@ -94,9 +80,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     onPressed: () {
                       context.read<AuthCubit>().login(
-                        emailController.text.trim(),
-                        passwordController.text.trim(),
-                      );
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
+                          );
                     },
                     child: const Text(
                       "Login",
@@ -104,10 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 16),
-
-                /// REGISTER LINK
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

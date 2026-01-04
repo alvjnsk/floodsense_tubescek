@@ -8,7 +8,7 @@ class LaporanState extends Equatable {
   final String catatan;
   final File? foto;
 
-  final List<LaporanModel> laporanList; // ✅ INI YANG KURANG
+  final List<LaporanModel> laporanList; 
   final LaporanStatus status;
 
   const LaporanState({
@@ -16,7 +16,7 @@ class LaporanState extends Equatable {
     this.koordinat = '',
     this.catatan = '',
     this.foto,
-    this.laporanList = const [], // ✅ DEFAULT
+    this.laporanList = const [], 
     this.status = LaporanStatus.initial,
   });
 
@@ -44,7 +44,7 @@ class LaporanState extends Equatable {
         koordinat,
         catatan,
         foto,
-        laporanList, // ✅ WAJIB
+        laporanList,
         status,
       ];
 }

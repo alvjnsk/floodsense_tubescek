@@ -52,14 +52,13 @@ class _RegisterPageState extends State<RegisterPage> {
         );
         Navigator.pop(context);
       } else {
-        // Ganti baris ini untuk melihat apa yang salah menurut Laravel
         print("Body Error: ${response.body}");
 
         final errorData = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Gagal: ${response.body}"),
-          ), // Tampilkan seluruh isi body error
+          ),
         );
       }
     } catch (e) {

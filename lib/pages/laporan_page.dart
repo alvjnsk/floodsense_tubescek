@@ -4,9 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../cubit/laporan/laporan_cubit.dart';
 
-/// ===============================
-/// WRAPPER: PROVIDER
-/// ===============================
 class LaporanPage extends StatelessWidget {
   const LaporanPage({super.key});
 
@@ -19,9 +16,6 @@ class LaporanPage extends StatelessWidget {
   }
 }
 
-/// ===============================
-/// VIEW / UI
-/// ===============================
 class LaporanView extends StatelessWidget {
   const LaporanView({super.key});
 
@@ -56,7 +50,6 @@ class LaporanView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// ALERT
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -77,34 +70,24 @@ class LaporanView extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(height: 16),
-
-              /// ALAMAT
               _textField(
                 label: "Alamat",
                 hint: "Jl. Sukabirus",
                 onChanged: (v) => context.read<LaporanCubit>().updateAlamat(v),
               ),
-
               const SizedBox(height: 12),
-
-              /// KOORDINAT
               _textField(
                 label: "Koordinat",
                 hint: "Masukkan koordinat atau link maps",
                 onChanged: (v) => context.read<LaporanCubit>().updateKoordinat(v),
               ),
-
               const SizedBox(height: 16),
-
-              /// UPLOAD FOTO
               const Text(
                 "Unggah Foto",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-
               BlocBuilder<LaporanCubit, LaporanState>(
                 builder: (context, state) {
                   return GestureDetector(
@@ -114,7 +97,6 @@ class LaporanView extends StatelessWidget {
                         source: ImageSource.gallery,
                         imageQuality: 70,
                       );
-
                       if (pickedFile != null) {
                         context.read<LaporanCubit>().setFoto(File(pickedFile.path));
                       }
@@ -146,27 +128,20 @@ class LaporanView extends StatelessWidget {
                   );
                 },
               ),
-
               const SizedBox(height: 16),
-
-              /// CATATAN
               _textField(
                 label: "Catatan Tambahan",
                 hint: "Contoh: air mulai naik sejak sore",
                 maxLines: 3,
                 onChanged: (v) => context.read<LaporanCubit>().updateCatatan(v),
               ),
-
               const SizedBox(height: 24),
-
-              /// BUTTON - PERBAIKAN DI SINI
               SizedBox(
                 width: double.infinity,
                 height: 48,
                 child: BlocBuilder<LaporanCubit, LaporanState>(
                   builder: (context, state) {
                     final isLoading = state.status == LaporanStatus.loading;
-                    
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF0B3470),
@@ -175,7 +150,6 @@ class LaporanView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      // Tombol akan memanggil submit dengan ID Masyarakat yang diinginkan
                       onPressed: isLoading 
                           ? null 
                           : () => context.read<LaporanCubit>().submit("M8621"),
@@ -203,7 +177,6 @@ class LaporanView extends StatelessWidget {
     );
   }
 
-  /// TEXT FIELD
   static Widget _textField({
     required String label,
     required String hint,

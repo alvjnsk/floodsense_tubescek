@@ -4,7 +4,7 @@ class LaporanModel {
   final String koordinat;
   final String catatan;
   final String? fotoPath;
-  final String status; // Menggunakan String sesuai database (divalidasi / Belum Divalidasi)
+  final String status;
 
   LaporanModel({
     required this.id,
@@ -15,22 +15,19 @@ class LaporanModel {
     required this.status,
   });
 
-  /// 🔹 DARI API (JSON → OBJECT)
   factory LaporanModel.fromJson(Map<String, dynamic> json) {
     return LaporanModel(
-      id: json['id_laporan']?.toString() ?? '', // Sesuai JSON database
+      id: json['id_laporan']?.toString() ?? '',
       alamat: json['alamat'] ?? '',
-      koordinat: json['koordinat'] ?? '', // Default kosong jika tidak ada di JSON
-      catatan: json['isi_laporan'] ?? '', // Sesuai JSON database: isi_laporan
-      fotoPath: json['foto'], // Sesuai JSON database: foto
-      status: json['status'] ?? 'Belum Divalidasi', // Sesuai JSON database: status
+      koordinat: json['koordinat'] ?? '',
+      catatan: json['isi_laporan'] ?? '',
+      fotoPath: json['foto'],
+      status: json['status'] ?? 'Belum Divalidasi',
     );
   }
 
-  /// Helper untuk mengecek status di UI (misal: untuk warna icon)
   bool get isApproved => status.toLowerCase() == 'divalidasi';
 
-  /// 🔹 KE API (OBJECT → JSON)
   Map<String, dynamic> toJson() {
     return {
       'id_laporan': id,

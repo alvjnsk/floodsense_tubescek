@@ -32,11 +32,7 @@ class MapFullPage extends StatelessWidget {
                 point: LatLng(-6.9764, 107.6390),
                 width: 80,
                 height: 80,
-                child: Icon(
-                  Icons.location_on,
-                  color: Colors.red,
-                  size: 40,
-                ),
+                child: Icon(Icons.location_on, color: Colors.red, size: 40),
               ),
             ],
           ),

@@ -71,8 +71,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // --- Widget Helpers ---
-
   Widget _locationHeader() {
     return Row(
       children: [

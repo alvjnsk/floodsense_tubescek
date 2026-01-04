@@ -30,10 +30,6 @@ class LaporanCubit extends Cubit<LaporanState> {
     emit(state.copyWith(foto: file));
   }
 
-  // ==========================================
-  // USER KIRIM LAPORAN KE API (DINAMIS)
-  // ==========================================
-  // Sekarang menerima parameter [idUser] agar tidak terkunci di satu ID saja
   Future<void> submit(String idUser) async {
     emit(state.copyWith(status: LaporanStatus.loading));
 
@@ -41,7 +37,6 @@ class LaporanCubit extends Cubit<LaporanState> {
       final uri = Uri.parse('$baseUrl/laporan');
       final request = http.MultipartRequest('POST', uri);
 
-      // Menggunakan idUser yang dikirim saat tombol ditekan
       request.fields['id_masyarakat'] = idUser; 
       request.fields['alamat'] = state.alamat;
       request.fields['koordinat'] = state.koordinat;
@@ -77,9 +72,6 @@ class LaporanCubit extends Cubit<LaporanState> {
     }
   }
 
-  // =============================
-  // ADMIN AMBIL DATA LAPORAN
-  // =============================
   Future<void> fetchLaporan() async {
     emit(state.copyWith(status: LaporanStatus.loading));
 
@@ -107,9 +99,6 @@ class LaporanCubit extends Cubit<LaporanState> {
     }
   }
 
-  // =============================
-  // ADMIN ACC LAPORAN
-  // =============================
   Future<void> approveLaporan(String id) async {
     try {
       final response = await http.put(
