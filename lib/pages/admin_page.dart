@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/laporan/laporan_cubit.dart';
 
-/// =============================================================
-/// WRAPPER: Menambahkan BlocProvider agar AdminView bisa jalan
-/// =============================================================
 class AdminPage extends StatelessWidget {
   const AdminPage({super.key});
 
@@ -17,9 +14,6 @@ class AdminPage extends StatelessWidget {
   }
 }
 
-/// =============================================================
-/// VIEW: Bagian utama UI Admin
-/// =============================================================
 class AdminView extends StatefulWidget {
   const AdminView({super.key});
 
@@ -31,8 +25,33 @@ class _AdminViewState extends State<AdminView> {
   @override
   void initState() {
     super.initState();
-    // ✅ Mengambil data terbaru secara otomatis saat halaman terbuka
     context.read<LaporanCubit>().fetchLaporan();
+  }
+
+  void _handleLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Apakah Anda yakin ingin keluar?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/login',
+                (route) => false,
+              );
+            },
+            child: const Text('Logout', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -45,7 +64,11 @@ class _AdminViewState extends State<AdminView> {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () => context.read<LaporanCubit>().fetchLaporan(),
-          )
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => _handleLogout(context),
+          ),
         ],
       ),
       body: BlocBuilder<LaporanCubit, LaporanState>(
@@ -86,8 +109,6 @@ class _AdminViewState extends State<AdminView> {
                       const SizedBox(height: 6),
                       Text('Catatan: ${laporan.catatan}'),
                       const SizedBox(height: 8),
-
-                      // Menampilkan gambar dari URL Server Laravel
                       if (laporan.fotoPath != null && laporan.fotoPath!.isNotEmpty)
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
@@ -105,9 +126,7 @@ class _AdminViewState extends State<AdminView> {
                             },
                           ),
                         ),
-
                       const SizedBox(height: 12),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
